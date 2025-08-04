@@ -1,21 +1,37 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart' as http_parser;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService {
   static const String baseUrl = 'https://connect-nu-lyart.vercel.app/api';
+  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
   // Store the JWT token
   static String? _token;
 
   static String? get token => _token;
 
-  static void setToken(String token) {
+  static Future<void> setToken(String token) async {
     _token = token;
+    await _secureStorage.write(key: 'auth_token', value: token);
   }
 
-  static void clearToken() {
+  static Future<void> clearToken() async {
     _token = null;
+    await _secureStorage.delete(key: 'auth_token');
+  }
+
+  // Load token from secure storage
+  static Future<String?> loadToken() async {
+    try {
+      _token = await _secureStorage.read(key: 'auth_token');
+      return _token;
+    } catch (e) {
+      print('Error loading token: $e');
+      return null;
+    }
   }
 
   // Save user data to local storage
@@ -128,27 +144,25 @@ class AuthService {
         if (profileData is List && profileData.isNotEmpty) {
           profileData = profileData[0];
         } else if (profileData is List && profileData.isEmpty) {
-          return {
-            'success': false,
-            'error': 'No profile found',
-          };
+          return {'success': false, 'error': 'No profile found'};
         }
+        return {'success': true, 'data': profileData};
+      } else if (response.statusCode == 401) {
+        // Token expired or invalid
+        await clearToken();
         return {
-          'success': true,
-          'data': profileData,
+          'success': false,
+          'error': 'Session expired. Please login again.',
         };
       } else {
         final error = jsonDecode(response.body);
         return {
           'success': false,
-          'error': error['error'] ?? 'Failed to get profile',
+          'error': error['error'] ?? 'Failed to load profile',
         };
       }
     } catch (e) {
-      return {
-        'success': false,
-        'error': 'Network error: ${e.toString()}',
-      };
+      return {'success': false, 'error': 'Network error: ${e.toString()}'};
     }
   }
 
@@ -158,6 +172,9 @@ class AuthService {
     String? imagePath,
   }) async {
     try {
+      print('Creating profile with name: $name, imagePath: $imagePath');
+      print('Auth headers: $authHeaders');
+
       var request = http.MultipartRequest(
         'POST',
         Uri.parse('$baseUrl/profile'),
@@ -165,37 +182,55 @@ class AuthService {
 
       // Add authorization header
       request.headers.addAll(authHeaders);
+      print('Request headers: ${request.headers}');
 
       // Add form fields
       request.fields['name'] = name;
+      print('Request fields: ${request.fields}');
 
       // Add image file if provided
       if (imagePath != null) {
+        print('Adding image file: $imagePath');
+        // Determine the correct content type based on file extension
+        String contentType = 'image/jpeg'; // Default
+        if (imagePath.toLowerCase().endsWith('.png')) {
+          contentType = 'image/png';
+        } else if (imagePath.toLowerCase().endsWith('.jpg') ||
+            imagePath.toLowerCase().endsWith('.jpeg')) {
+          contentType = 'image/jpeg';
+        } else if (imagePath.toLowerCase().endsWith('.gif')) {
+          contentType = 'image/gif';
+        }
+
         request.files.add(
-          await http.MultipartFile.fromPath('image', imagePath),
+          await http.MultipartFile.fromPath(
+            'image',
+            imagePath,
+            contentType: http_parser.MediaType.parse(contentType),
+          ),
         );
+        print('Image file added successfully with content type: $contentType');
       }
 
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
+      print('Response status: ${response.statusCode}');
+      print('Response body: $responseBody');
+
       final data = jsonDecode(responseBody);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return {
-          'success': true,
-          'data': data['profile'],
-        };
+        print('Profile created successfully: ${data['profile']}');
+        return {'success': true, 'data': data['profile']};
       } else {
-        return {
-          'success': false,
-          'error': data['error'] ?? 'Failed to create profile',
-        };
+        final error = data['error'] ?? 'Failed to create profile';
+        print('Profile creation failed: $error');
+        return {'success': false, 'error': error};
       }
-    } catch (e) {
-      return {
-        'success': false,
-        'error': 'Network error: ${e.toString()}',
-      };
+    } catch (e, stackTrace) {
+      print('Error creating profile: $e');
+      print('Stack trace: $stackTrace');
+      return {'success': false, 'error': 'Network error: ${e.toString()}'};
     }
   }
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:connect_thrive_app/services/language_provider.dart';
 import 'package:connect_thrive_app/widgets/profile_app_bar.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -6,10 +8,29 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Connect & Thrive'),
         actions: [
+          // Language selection dropdown
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.language),
+            onSelected: (languageCode) {
+              languageProvider.changeLanguage(languageCode);
+            },
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem<String>(
+                value: 'ar',
+                child: Text('العربية'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'fr',
+                child: Text('Français'),
+              ),
+            ],
+          ),
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {},
@@ -28,8 +49,6 @@ class HomeScreen extends StatelessWidget {
             _buildWelcomeCard(),
             const SizedBox(height: 24),
             _buildQuickActions(),
-            const SizedBox(height: 24),
-            _buildRecentActivity(),
             const SizedBox(height: 24),
             _buildDailyQuote(),
           ],
@@ -126,149 +145,101 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildQuickAction(
-              icon: Icons.book,
-              label: 'Resources',
-              color: const Color(0xFF6366F1),
-            ),
-            _buildQuickAction(
-              icon: Icons.people,
-              label: 'Community',
-              color: const Color(0xFF8B5CF6),
-            ),
-            _buildQuickAction(
-              icon: Icons.mood,
-              label: 'Track Mood',
-              color: const Color(0xFF10B981),
-            ),
-            _buildQuickAction(
-              icon: Icons.edit,
-              label: 'Journal',
-              color: const Color(0xFFF59E0B),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildQuickAction({
-    required IconData icon,
-    required String label,
-    required Color color,
-  }) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icon, color: color, size: 32),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRecentActivity() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Recent Activity',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        _buildActivityCard(
+        _buildActionCard(
           icon: Icons.mood,
-          title: 'Mood logged',
-          subtitle: 'You marked today as "Happy"',
-          time: '2 hours ago',
+          title: 'Log Mood',
+          subtitle: 'Track how you\'re feeling today',
           color: const Color(0xFF10B981),
+          onTap: () {
+            // Navigate to mood logging
+          },
         ),
         const SizedBox(height: 12),
-        _buildActivityCard(
-          icon: Icons.book,
-          title: 'Article completed',
-          subtitle: '"Managing Anxiety in Teens"',
-          time: '1 day ago',
+        _buildActionCard(
+          icon: Icons.people,
+          title: 'Find Support',
+          subtitle: 'Connect with mental health professionals',
           color: const Color(0xFF6366F1),
+          onTap: () {
+            // Navigate to support section
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildActionCard(
+          icon: Icons.article,
+          title: 'Read Articles',
+          subtitle: 'Explore mental wellness resources',
+          color: const Color(0xFFF59E0B),
+          onTap: () {
+            // Navigate to articles
+          },
         ),
       ],
     );
   }
 
-  Widget _buildActivityCard({
+  Widget _buildActionCard({
     required IconData icon,
     required String title,
     required String subtitle,
-    required String time,
     required Color color,
+    required VoidCallback onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-            child: Icon(icon, color: color, size: 20),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: color, size: 24),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF64748B),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Text(
-            time,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Color(0xFF94A3B8),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.grey[400],
+              size: 16,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

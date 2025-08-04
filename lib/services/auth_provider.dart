@@ -10,12 +10,28 @@ class AuthProvider extends ChangeNotifier {
   String? get token => _token;
   Map<String, dynamic>? get userProfile => _userProfile;
 
+  // Initialize auth state when app starts
+  Future<void> initAuth() async {
+    await loadToken();
+    if (_isAuthenticated) {
+      await refreshProfile();
+    }
+  }
+
+  // Load token from secure storage
+  Future<void> loadToken() async {
+    _token = await AuthService.loadToken();
+    _isAuthenticated = _token != null;
+    notifyListeners();
+  }
+
   Future<bool> login(String email, String password) async {
     final result = await AuthService.login(email, password);
 
     if (result['success']) {
       _isAuthenticated = true;
       _token = result['data']['access_token'];
+      await AuthService.setToken(_token!);
       await loadProfile();
       notifyListeners();
       return true;
@@ -30,6 +46,7 @@ class AuthProvider extends ChangeNotifier {
     if (result['success']) {
       _isAuthenticated = true;
       _token = result['data']['access_token'];
+      await AuthService.setToken(_token!);
       await loadProfile();
       notifyListeners();
       return true;
@@ -39,13 +56,38 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> loadProfile() async {
+    await refreshProfile();
+  }
+
+  Future<void> refreshProfile() async {
     if (!_isAuthenticated) return;
 
     final result = await AuthService.getProfile();
     if (result['success']) {
-      _userProfile = result['data'];
+      dynamic profileData = result['data'];
+
+      // Handle different API response formats
+      if (profileData is List) {
+        if (profileData.isNotEmpty) {
+          _userProfile = profileData[0] as Map<String, dynamic>;
+        } else {
+          _userProfile = null; // Empty list = no profile
+        }
+      } else if (profileData is Map<String, dynamic>) {
+        _userProfile = profileData;
+      } else {
+        _userProfile = null; // Unexpected format
+      }
+
       notifyListeners();
     } else {
+      // Handle token expiration
+      if (result['error']?.contains('Session expired') == true) {
+        // Token expired, force logout
+        await logout();
+        return;
+      }
+
       // Profile doesn't exist yet - this is expected for new users
       print('Profile not found: ${result['error']}');
       _userProfile = null;
@@ -81,8 +123,25 @@ class AuthProvider extends ChangeNotifier {
       );
 
       if (result['success']) {
-        _userProfile = result['data'];
-        await AuthService.saveUserData(_userProfile!);
+        dynamic profileData = result['data'];
+
+        // Handle different API response formats for create profile
+        if (profileData is List) {
+          if (profileData.isNotEmpty) {
+            _userProfile = profileData[0] as Map<String, dynamic>;
+          } else {
+            _userProfile = null;
+          }
+        } else if (profileData is Map<String, dynamic>) {
+          _userProfile = profileData;
+        } else {
+          _userProfile = null;
+        }
+
+        if (_userProfile != null) {
+          await AuthService.saveUserData(_userProfile!);
+        }
+
         notifyListeners();
       }
 

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:connect_thrive_app/l10n/app_localizations.dart';
+import 'package:connect_thrive_app/services/auth_provider.dart';
+import 'package:connect_thrive_app/widgets/language_switcher.dart';
+import 'package:connect_thrive_app/widgets/theme_switcher.dart';
 import 'package:connect_thrive_app/screens/home_screen.dart';
 import 'package:connect_thrive_app/screens/resources_screen.dart';
 import 'package:connect_thrive_app/screens/forums_screen_modern.dart';
@@ -38,9 +43,23 @@ class _MainNavigationState extends State<MainNavigation> {
         backgroundColor: Colors.blue.shade800,
         foregroundColor: Colors.white,
         child: const Icon(Icons.psychology),
-        tooltip: 'AI Mental Health Assistant',
+        tooltip: AppLocalizations.of(context)?.aiAssistant ?? 'AI Mental Health Assistant',
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      appBar: AppBar(
+        actions: [
+          const ThemeSwitcher(),
+          const SizedBox(width: 8),
+          const LanguageSwitcher(),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: AppLocalizations.of(context)?.logout ?? 'Logout',
+            onPressed: () {
+              Provider.of<AuthProvider>(context, listen: false).logout();
+            },
+          ),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) {
@@ -48,31 +67,31 @@ class _MainNavigationState extends State<MainNavigation> {
             _currentIndex = index;
           });
         },
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
+            icon: const Icon(Icons.home_outlined),
+            selectedIcon: const Icon(Icons.home),
+            label: AppLocalizations.of(context)?.home ?? 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.article_outlined),
-            selectedIcon: Icon(Icons.article),
-            label: 'Resources',
+            icon: const Icon(Icons.article_outlined),
+            selectedIcon: const Icon(Icons.article),
+            label: AppLocalizations.of(context)?.resources ?? 'Resources',
           ),
           NavigationDestination(
-            icon: Icon(Icons.forum_outlined),
-            selectedIcon: Icon(Icons.forum),
-            label: 'Forums',
+            icon: const Icon(Icons.forum_outlined),
+            selectedIcon: const Icon(Icons.forum),
+            label: AppLocalizations.of(context)?.forums ?? 'Forums',
           ),
           NavigationDestination(
-            icon: Icon(Icons.book),
-            selectedIcon: Icon(Icons.book),
-            label: 'Journal',
+            icon: const Icon(Icons.book),
+            selectedIcon: const Icon(Icons.book),
+            label: AppLocalizations.of(context)?.journal ?? 'Journal',
           ),
           NavigationDestination(
-            icon: Icon(Icons.medical_services_outlined),
-            selectedIcon: Icon(Icons.medical_services),
-            label: 'Doctors',
+            icon: const Icon(Icons.medical_services_outlined),
+            selectedIcon: const Icon(Icons.medical_services),
+            label: AppLocalizations.of(context)?.doctors ?? 'Doctors',
           ),
         ],
       ),

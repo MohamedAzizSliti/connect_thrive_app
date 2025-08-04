@@ -4,6 +4,7 @@ import '../services/forum_provider.dart';
 import '../models/forum_models.dart';
 import 'forum_posts_screen.dart';
 import 'create_forum_screen.dart';
+import '../l10n/app_localizations.dart';
 
 class ForumsScreen extends StatefulWidget {
   const ForumsScreen({super.key});
@@ -14,13 +15,16 @@ class ForumsScreen extends StatefulWidget {
 
 class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
+  
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    // Defer loading until after the build is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadForums();
+      if (mounted) {
+        _loadForums();
+      }
     });
   }
 
@@ -37,31 +41,33 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Community Forums',
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: Text(
+          localizations.communityForums,
           style: TextStyle(
-            color: Colors.black87,
+            color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
         ),
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.blue.shade800,
-          labelColor: Colors.blue.shade800,
-          unselectedLabelColor: Colors.grey.shade600,
+          indicatorColor: Theme.of(context).colorScheme.primary,
+          labelColor: Theme.of(context).colorScheme.primary,
+          unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
           labelStyle: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
-          tabs: const [
-            Tab(text: 'All Forums'),
-            Tab(text: 'My Forums'),
+          tabs: [
+            Tab(text: localizations.allForums),
+            Tab(text: localizations.myForums),
           ],
         ),
       ),
@@ -79,10 +85,10 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
             MaterialPageRoute(builder: (_) => const CreateForumScreen()),
           );
         },
-        backgroundColor: Colors.blue.shade800,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         icon: const Icon(Icons.add),
-        label: const Text('New Forum'),
+        label: Text(localizations.newForum),
       ),
     );
   }
@@ -94,14 +100,12 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
         
         if (forumProvider.isLoading) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: Colors.blue,
-            ),
+            child: CircularProgressIndicator(),
           );
         }
 
         if (forums.isEmpty) {
-          return _buildEmptyState(showMyForums);
+          return _buildEmptyState(showMyForums, context);
         }
 
         return RefreshIndicator(
@@ -120,15 +124,16 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
 
   Widget _buildModernForumCard(Forum forum, ForumProvider forumProvider) {
     final isJoined = forumProvider.myForums.any((f) => f.id == forum.id);
+    final localizations = AppLocalizations.of(context)!;
     
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade200,
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -210,39 +215,45 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.people,
-                          size: 16,
-                          color: Colors.grey.shade600,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${forum.membersCount} members',
-                          style: TextStyle(
-                            fontSize: 14,
+                    Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.people,
+                            size: 14,
                             color: Colors.grey.shade600,
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Icon(
-                          Icons.chat_bubble_outline,
-                          size: 16,
-                          color: Colors.grey.shade600,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${forum.postsCount} posts',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade600,
+                          const SizedBox(width: 2),
+                          Text(
+                            '${forum.membersCount}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 8),
+                          Icon(
+                            Icons.chat_bubble_outline,
+                            size: 14,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            '${forum.postsCount}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    _buildActionButton(forum, forumProvider, isJoined),
+                    Flexible(
+                      child: _buildActionButton(forum, forumProvider, isJoined),
+                    ),
                   ],
                 ),
               ],
@@ -254,6 +265,7 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
   }
 
   Widget _buildActionButton(Forum forum, ForumProvider forumProvider, bool isJoined) {
+    final localizations = AppLocalizations.of(context)!;
     return ElevatedButton(
       onPressed: () async {
         if (forum.isMember) {
@@ -271,8 +283,12 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
         }
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: forum.isMember ? Colors.green.shade50 : Colors.blue.shade50,
-        foregroundColor: forum.isMember ? Colors.green.shade800 : Colors.blue.shade800,
+        backgroundColor: forum.isMember 
+          ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+          : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+        foregroundColor: forum.isMember 
+          ? Theme.of(context).colorScheme.secondary
+          : Theme.of(context).colorScheme.primary,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -280,7 +296,7 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
       child: Text(
-        forum.isMember ? 'View Forum' : 'Join Forum',
+        forum.isMember ? localizations.viewForum : localizations.joinForum,
         style: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
@@ -289,7 +305,8 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
     );
   }
 
-  Widget _buildEmptyState(bool showMyForums) {
+  Widget _buildEmptyState(bool showMyForums, BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -297,27 +314,27 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
           Icon(
             showMyForums ? Icons.group_off : Icons.forum_outlined,
             size: 80,
-            color: Colors.grey.shade300,
+            color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
           ),
           const SizedBox(height: 20),
           Text(
             showMyForums
-                ? 'No forums joined yet'
-                : 'No forums available',
+                ? localizations.noForumsJoinedYet
+                : localizations.noForumsAvailable,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.grey.shade600,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             showMyForums
-                ? 'Join some forums to see them here'
-                : 'Be the first to create a forum!',
+                ? localizations.joinSomeForumsToSeeThem
+                : localizations.beTheFirstToCreateForum,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey.shade500,
+              color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.7),
             ),
           ),
           if (!showMyForums) ...[
@@ -330,14 +347,14 @@ class _ForumsScreenState extends State<ForumsScreen> with SingleTickerProviderSt
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue.shade800,
-                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
-              child: const Text('Create First Forum'),
+              child: Text(localizations.createFirstForum),
             ),
           ],
         ],

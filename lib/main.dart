@@ -7,6 +7,8 @@ import 'services/forum_provider.dart';
 import 'services/journal_provider.dart';
 import 'services/ai_service.dart';
 import 'services/language_provider.dart';
+import 'services/theme_provider.dart';
+import 'themes/app_theme.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/main_navigation.dart';
 import 'l10n/app_localizations.dart';
@@ -29,15 +31,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ForumProvider()),
         ChangeNotifierProvider(create: (_) => JournalProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: Consumer<LanguageProvider>(
-        builder: (context, languageProvider, child) {
+      child: Consumer2<LanguageProvider, ThemeProvider>(
+        builder: (context, languageProvider, themeProvider, child) {
           return MaterialApp(
             title: 'Connect & Thrive',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeProvider.themeMode,
             locale: languageProvider.currentLocale,
             supportedLocales: const [Locale('ar'), Locale('fr')],
             localizationsDelegates: const [
@@ -46,34 +48,6 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            themeMode: ThemeMode.system,
-            darkTheme: ThemeData(
-              colorScheme: ColorScheme.dark(
-                primary: const Color(0xFF6366F1),
-                secondary: const Color(0xFF8B5CF6),
-                surface: const Color(0xFF1E293B),
-                background: const Color(0xFF0F172A),
-                error: const Color(0xFFEF4444),
-                onPrimary: Colors.white,
-                onSecondary: Colors.white,
-                onSurface: Colors.white,
-                onBackground: Colors.white,
-                onError: Colors.white,
-              ),
-              scaffoldBackgroundColor: const Color(0xFF0F172A),
-              useMaterial3: true,
-              appBarTheme: const AppBarTheme(
-                elevation: 0,
-                centerTitle: true,
-                backgroundColor: Color(0xFF0F172A),
-                foregroundColor: Colors.white,
-                titleTextStyle: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-            ),
             home: const AuthWrapper(),
           );
         },

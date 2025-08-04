@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:connect_thrive_app/screens/login_screen.dart';
+import 'package:connect_thrive_app/l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -16,29 +17,29 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   late AnimationController _animationController;
   int _currentPage = 0;
 
-  final List<OnboardingSlide> slides = [
-    OnboardingSlide(
-      title: 'Welcome to Connect & Thrive',
-      description:
-          'Your safe space for mental health support, designed specifically for teenagers in Tunisia',
-      lottieAsset: 'assets/animations/welcome.json',
-      color: Color(0xFF6366F1),
-    ),
-    OnboardingSlide(
-      title: 'Track Your Mood',
-      description:
-          'Monitor your emotions daily and discover patterns to improve your mental wellbeing',
-      lottieAsset: 'assets/animations/mood_tracking.json',
-      color: Color(0xFF8B5CF6),
-    ),
-    OnboardingSlide(
-      title: 'Connect with Community',
-      description:
-          'Join supportive communities and connect with peers who understand your journey',
-      lottieAsset: 'assets/animations/community.json',
-      color: Color(0xFF10B981),
-    ),
-  ];
+  List<OnboardingSlide> getSlides(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return [
+      OnboardingSlide(
+        title: localizations.onboardingWelcomeTitle,
+        description: localizations.onboardingWelcomeDesc,
+        lottieAsset: 'assets/animations/welcome.json',
+        color: Color(0xFF6366F1),
+      ),
+      OnboardingSlide(
+        title: localizations.onboardingMoodTitle,
+        description: localizations.onboardingMoodDesc,
+        lottieAsset: 'assets/animations/mood_tracking.json',
+        color: Color(0xFF8B5CF6),
+      ),
+      OnboardingSlide(
+        title: localizations.onboardingCommunityTitle,
+        description: localizations.onboardingCommunityDesc,
+        lottieAsset: 'assets/animations/community.json',
+        color: Color(0xFF10B981),
+      ),
+    ];
+  }
 
   @override
   void initState() {
@@ -67,6 +68,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final slides = getSlides(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -88,7 +91,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 child: TextButton(
                   onPressed: () => _navigateToLogin(),
                   child: Text(
-                    'Skip',
+                    localizations.skip,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
                       fontSize: 16,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 
 class Doctor {
   final String name;
@@ -216,82 +217,13 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
+        title: Text(localizations.findDoctor),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         elevation: 0,
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Tunisian Mental Health Professionals',
-          style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(120),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedLocation,
-                        decoration: InputDecoration(
-                          labelText: 'Location',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                        items: locations.map((location) {
-                          return DropdownMenuItem(
-                            value: location,
-                            child: Text(location),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedLocation = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedSpecialty,
-                        decoration: InputDecoration(
-                          labelText: 'Specialty',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                        items: specialties.map((specialty) {
-                          return DropdownMenuItem(
-                            value: specialty,
-                            child: Text(specialty),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedSpecialty = value!;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
       body: filteredDoctors.isEmpty
           ? _buildEmptyState()
@@ -306,6 +238,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
   }
 
   Widget _buildModernDoctorCard(Doctor doctor) {
+    final localizations = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -369,9 +302,16 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                           ),
                           const SizedBox(width: 4),
                           Text(
+                            localizations.rating,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Text(
                             doctor.rating.toString(),
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 12,
                               color: Colors.grey.shade600,
                             ),
                           ),
@@ -438,7 +378,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                   child: OutlinedButton.icon(
                     onPressed: () => _makePhoneCall(doctor.phone),
                     icon: const Icon(Icons.phone, size: 16),
-                    label: const Text('Call'),
+                    label: Text(localizations.contact),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.blue.shade800,
                       side: BorderSide(color: Colors.blue.shade800),
@@ -453,7 +393,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                   child: ElevatedButton.icon(
                     onPressed: () => _sendEmail(doctor.email),
                     icon: const Icon(Icons.email, size: 16),
-                    label: const Text('Email'),
+                    label: Text('Email'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue.shade800,
                       foregroundColor: Colors.white,
@@ -512,7 +452,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
       await launchUri.toString();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch phone: $e')),
+        SnackBar(content: Text('Impossible d\'ouvrir l\'application téléphone: $e')),
       );
     }
   }
@@ -526,7 +466,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
       await launchUri.toString();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch email: $e')),
+        SnackBar(content: Text('Impossible d\'ouvrir l\'application email: $e')),
       );
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:connect_thrive_app/widgets/profile_app_bar.dart';
+import 'package:connect_thrive_app/l10n/app_localizations.dart';
 
 class DoctorsScreen extends StatefulWidget {
   const DoctorsScreen({super.key});
@@ -100,9 +101,10 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Professional Help'),
+        title: Text(localizations.findDoctor),
         actions: [
           const Padding(
             padding: EdgeInsets.only(right: 8.0),
@@ -120,12 +122,13 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                 // Search Bar
                 TextField(
                   decoration: InputDecoration(
-                    hintText: 'Search doctors by name, specialty...',
+                    hintText: localizations.searchDoctorsHint,
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    filled: true,
+                    fillColor: Theme.of(context).colorScheme.surface,
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -134,54 +137,56 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                   },
                 ),
                 const SizedBox(height: 12),
-                // Filter Row
-                Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedLocation,
-                        decoration: const InputDecoration(
-                          labelText: 'Location',
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                        ),
-                        items: locations.map((location) => DropdownMenuItem(
-                          value: location,
-                          child: Text(location),
-                        )).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedLocation = value!;
-                          });
-                        },
-                      ),
+                // Location Filter
+                DropdownButtonFormField<String>(
+                  value: _selectedLocation,
+                  decoration: InputDecoration(
+                    labelText: localizations.location,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedSpecialty,
-                        decoration: const InputDecoration(
-                          labelText: 'Specialty',
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                        ),
-                        items: specialties.map((specialty) => DropdownMenuItem(
-                          value: specialty,
-                          child: Text(specialty),
-                        )).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedSpecialty = value!;
-                          });
-                        },
-                      ),
+                    filled: true,
+                    fillColor: Theme.of(context).colorScheme.surface,
+                  ),
+                  items: locations.map((location) {
+                    return DropdownMenuItem(
+                      value: location,
+                      child: Text(location == 'All' ? localizations.all : location),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedLocation = value!;
+                    });
+                  },
+                ),
+                const SizedBox(height: 12),
+                // Specialty Filter
+                DropdownButtonFormField<String>(
+                  value: _selectedSpecialty,
+                  decoration: InputDecoration(
+                    labelText: localizations.specialty,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  ],
+                    filled: true,
+                    fillColor: Theme.of(context).colorScheme.surface,
+                  ),
+                  items: specialties.map((specialty) {
+                    return DropdownMenuItem(
+                      value: specialty,
+                      child: Text(specialty == 'All' ? localizations.all : specialty),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedSpecialty = value!;
+                    });
+                  },
                 ),
               ],
             ),
           ),
-          
           // Results
           Expanded(
             child: filteredDoctors.isEmpty
@@ -206,6 +211,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
   }
 
   Widget _buildDoctorCard(Map<String, dynamic> doctor) {
+    final localizations = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -242,35 +248,33 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                     children: [
                       Text(
                         doctor['name'],
-                        style: const TextStyle(
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
                         ),
                       ),
+                      const SizedBox(height: 4),
                       Text(
                         doctor['specialty'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF6366F1),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          const Icon(Icons.star, color: Color(0xFFF59E0B), size: 16),
+                          Icon(Icons.star, color: Colors.amber, size: 16),
                           const SizedBox(width: 4),
                           Text(
                             doctor['rating'].toString(),
-                            style: const TextStyle(fontSize: 12),
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const SizedBox(width: 12),
-                          const Icon(Icons.location_on, color: Color(0xFF64748B), size: 14),
+                          Icon(Icons.location_on, color: Theme.of(context).colorScheme.onSurfaceVariant, size: 14),
                           const SizedBox(width: 4),
                           Text(
                             doctor['location'],
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Color(0xFF64748B),
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ],
@@ -278,9 +282,8 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                       const SizedBox(height: 4),
                       Text(
                         doctor['experience'],
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF64748B),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -298,7 +301,7 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    doctor['available'] ? 'Available' : 'Busy',
+                    doctor['available'] ? localizations.available : localizations.notAvailable,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
@@ -311,22 +314,21 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
             const SizedBox(height: 12),
             Text(
               doctor['description'],
-              style: const TextStyle(
-                fontSize: 13,
-                color: Color(0xFF64748B),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 12),
             Row(
               children: [
-                const Icon(Icons.volunteer_activism, color: Color(0xFF10B981), size: 16),
+                Icon(Icons.volunteer_activism, color: Colors.green, size: 16),
                 const SizedBox(width: 4),
-                const Text(
-                  'Voluntary Service - Free',
+                Text(
+                  localizations.voluntaryService,
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF10B981),
+                    color: Colors.green,
                   ),
                 ),
                 const Spacer(),
@@ -342,11 +344,11 @@ class _DoctorsScreenState extends State<DoctorsScreen> {
                       vertical: 8,
                     ),
                     minimumSize: const Size(0, 0),
-                    backgroundColor: const Color(0xFF6366F1),
-                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
-                  child: const Text(
-                    'Contact',
+                  child: Text(
+                    localizations.contact,
                     style: TextStyle(fontSize: 12),
                   ),
                 ),

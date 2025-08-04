@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/ai_service.dart';
 import '../services/journal_provider.dart';
+import '../l10n/app_localizations.dart';
 
 class AIChatScreen extends StatefulWidget {
   const AIChatScreen({super.key});
@@ -19,7 +20,10 @@ class _AIChatScreenState extends State<AIChatScreen> {
   @override
   void initState() {
     super.initState();
-    _addWelcomeMessage();
+    // Add welcome message after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _addWelcomeMessage();
+    });
   }
 
   @override
@@ -30,15 +34,17 @@ class _AIChatScreenState extends State<AIChatScreen> {
   }
 
   void _addWelcomeMessage() {
+    if (!mounted) return;
+    final localizations = AppLocalizations.of(context)!;
     setState(() {
       _messages.add(ChatMessage(
-        text: '''🧠 **AI Mental Health Assistant**
+        text: '''🧠 **${localizations.aiAssistantTitle}**
 
-Hello! I'm here to provide supportive guidance and general wellness advice. 
+${localizations.aiWelcomeMessage}
 
-⚠️ **Important:** I am an AI assistant, not a licensed psychiatrist or medical professional. For serious mental health concerns, please consult licensed professionals.
+⚠️ **${localizations.aiDisclaimerTitle}:** ${localizations.aiDisclaimerText}
 
-How can I help you today?''',
+${localizations.aiHowCanIHelp}''',
         isUser: false,
         timestamp: DateTime.now(),
       ));
@@ -81,9 +87,10 @@ How can I help you today?''',
 
       _scrollToBottom();
     } catch (e) {
+      final localizations = AppLocalizations.of(context)!;
       setState(() {
         _messages.add(ChatMessage(
-          text: 'I apologize, but I\'m having trouble processing your message. Please try again.',
+          text: localizations.aiErrorMessage,
           isUser: false,
           timestamp: DateTime.now(),
         ));
@@ -106,28 +113,38 @@ How can I help you today?''',
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI Mental Health Assistant'),
-        backgroundColor: Colors.blue.shade800,
-        foregroundColor: Colors.white,
+        title: Text(localizations.aiAssistantTitle),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: Column(
         children: [
           // Disclaimer banner
           Container(
             padding: const EdgeInsets.all(12),
-            color: Colors.orange.shade100,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.3),
+              border: Border(
+                left: BorderSide(
+                  color: Theme.of(context).colorScheme.secondary,
+                  width: 4,
+                ),
+              ),
+            ),
             child: Row(
               children: [
-                Icon(Icons.warning_amber, color: Colors.orange.shade800, size: 20),
+                Icon(Icons.warning_amber, 
+                  color: Theme.of(context).colorScheme.secondary, 
+                  size: 20),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'AI Assistant - Not a substitute for professional medical advice',
-                    style: TextStyle(
-                      color: Colors.orange.shade800,
-                      fontSize: 12,
+                    localizations.aiDisclaimerBanner,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -175,7 +192,7 @@ How can I help you today?''',
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      hintText: 'Share your thoughts or ask for support...',
+                      hintText: localizations.aiInputHint,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
@@ -194,8 +211,8 @@ How can I help you today?''',
                   onPressed: _isLoading ? null : _sendMessage,
                   icon: const Icon(Icons.send),
                   style: IconButton.styleFrom(
-                    backgroundColor: Colors.blue.shade800,
-                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
               ],
@@ -213,7 +230,9 @@ How can I help you today?''',
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: message.isUser ? Colors.blue.shade100 : Colors.grey.shade200,
+          color: message.isUser 
+            ? Theme.of(context).colorScheme.primaryContainer
+            : Theme.of(context).colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -221,8 +240,10 @@ How can I help you today?''',
           children: [
             Text(
               message.text,
-              style: TextStyle(
-                color: message.isUser ? Colors.blue.shade900 : Colors.black87,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: message.isUser 
+                  ? Theme.of(context).colorScheme.onPrimaryContainer
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 4),

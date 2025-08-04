@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:connect_thrive_app/widgets/profile_app_bar.dart';
+import '../l10n/app_localizations.dart';
 
 class ResourcesScreen extends StatelessWidget {
   const ResourcesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mental Health Resources'),
+        title: Text(localizations.resources),
         actions: [
           IconButton(icon: const Icon(Icons.search), onPressed: () {}),
           IconButton(icon: const Icon(Icons.filter_list), onPressed: () {}),
@@ -23,24 +25,27 @@ class ResourcesScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildCategoriesSection(),
-            const SizedBox(height: 24),
-            _buildFeaturedResources(),
-            const SizedBox(height: 24),
-            _buildAllResources(),
+            _buildCategoriesSection(context),
+            const SizedBox(height: 32),
+            _buildFeaturedResources(context),
+            const SizedBox(height: 32),
+            _buildAllResources(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCategoriesSection() {
+  Widget _buildCategoriesSection(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Categories',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        Text(
+          localizations.categories,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 16),
         SizedBox(
@@ -49,33 +54,38 @@ class ResourcesScreen extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             children: [
               _buildCategoryCard(
-                'Stress Management',
+                context,
+                localizations.stressManagement,
                 Icons.spa,
-                const Color(0xFF6366F1),
+                Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(width: 12),
               _buildCategoryCard(
-                'Anxiety',
+                context,
+                localizations.anxiety,
                 Icons.psychology,
-                const Color(0xFF8B5CF6),
+                Theme.of(context).colorScheme.secondary,
               ),
               const SizedBox(width: 12),
               _buildCategoryCard(
-                'Depression',
+                context,
+                localizations.depression,
                 Icons.mood_bad,
-                const Color(0xFF10B981),
+                Theme.of(context).colorScheme.tertiary,
               ),
               const SizedBox(width: 12),
               _buildCategoryCard(
-                'Coping Skills',
+                context,
+                localizations.copingSkills,
                 Icons.handshake,
-                const Color(0xFFF59E0B),
+                Theme.of(context).colorScheme.primaryContainer,
               ),
               const SizedBox(width: 12),
               _buildCategoryCard(
-                'Positive Psychology',
+                context,
+                localizations.positivePsychology,
                 Icons.favorite,
-                const Color(0xFFEF4444),
+                Theme.of(context).colorScheme.secondaryContainer,
               ),
             ],
           ),
@@ -84,7 +94,7 @@ class ResourcesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryCard(String title, IconData icon, Color color) {
+  Widget _buildCategoryCard(BuildContext context, String title, IconData icon, Color color) {
     return Container(
       width: 100,
       padding: const EdgeInsets.all(16),
@@ -100,7 +110,9 @@ class ResourcesScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             title,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -108,50 +120,156 @@ class ResourcesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeaturedResources() {
+  Widget _buildFeaturedResources(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Featured Resources',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        Text(
+          localizations.featuredResources,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 16),
         _buildResourceCard(
-          title: 'Managing Anxiety in Teens',
-          description:
-              'A comprehensive guide to understanding and managing anxiety',
-          duration: '15 min read',
-          type: 'Article',
-          color: const Color(0xFF6366F1),
+          context: context,
+          title: localizations.managingAnxiety,
+          description: localizations.managingAnxietyDesc,
+          duration: localizations.read15min,
+          type: localizations.article,
+          color: Theme.of(context).colorScheme.primary,
         ),
         const SizedBox(height: 12),
         _buildResourceCard(
-          title: 'Guided Breathing Exercise',
-          description: '5-minute breathing technique for instant calm',
-          duration: '5 min audio',
-          type: 'Audio',
-          color: const Color(0xFF10B981),
+          context: context,
+          title: localizations.breathingExercise,
+          description: localizations.breathingExerciseDesc,
+          duration: localizations.audio10min,
+          type: localizations.audio,
+          color: Theme.of(context).colorScheme.secondary,
         ),
       ],
     );
   }
 
   Widget _buildResourceCard({
+    required BuildContext context,
     required String title,
     required String description,
     required String duration,
     required String type,
     required Color color,
   }) {
+    final localizations = AppLocalizations.of(context)!;
+    return Container(
+      width: 280,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).shadowColor.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              type,
+              style: TextStyle(
+                fontSize: 12,
+                color: color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            duration,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
+  Widget _buildAllResources(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          localizations.allResources,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        _buildResourceListItem(
+          context: context,
+          title: localizations.understandingDepression,
+          description: localizations.understandingDepressionDesc,
+          type: localizations.article,
+          duration: localizations.read20min,
+        ),
+        const SizedBox(height: 12),
+        _buildResourceListItem(
+          context: context,
+          title: localizations.muscleRelaxation,
+          description: localizations.muscleRelaxationDesc,
+          type: localizations.audio,
+          duration: localizations.audio10min,
+        ),
+        const SizedBox(height: 12),
+        _buildResourceListItem(
+          context: context,
+          title: localizations.buildingSelfEsteem,
+          description: localizations.buildingSelfEsteemDesc,
+          type: localizations.video,
+          duration: localizations.video15min,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildResourceListItem({
+    required BuildContext context,
+    required String title,
+    required String description,
+    required String type,
+    required String duration,
+  }) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Theme.of(context).shadowColor.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -159,164 +277,40 @@ class ResourcesScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              type == 'Article' ? Icons.article : Icons.audiotrack,
-              color: color,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   description,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF64748B),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Icon(Icons.access_time, size: 14, color: color),
-                    const SizedBox(width: 4),
-                    Text(
-                      duration,
-                      style: TextStyle(fontSize: 12, color: color),
-                    ),
-                    const SizedBox(width: 16),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.1),
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         type,
                         style: TextStyle(
                           fontSize: 10,
-                          color: color,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const Icon(Icons.chevron_right, color: Color(0xFF94A3B8)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAllResources() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'All Resources',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 16),
-        _buildResourceListItem(
-          'Understanding Depression',
-          'Learn about depression and coping strategies',
-          'Article',
-          '20 min',
-        ),
-        const SizedBox(height: 12),
-        _buildResourceListItem(
-          'Progressive Muscle Relaxation',
-          'Guided relaxation technique for stress relief',
-          'Audio',
-          '10 min',
-        ),
-        const SizedBox(height: 12),
-        _buildResourceListItem(
-          'Building Self-Esteem',
-          'Practical exercises to boost confidence',
-          'Video',
-          '15 min',
-        ),
-      ],
-    );
-  }
-
-  Widget _buildResourceListItem(
-    String title,
-    String description,
-    String type,
-    String duration,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF64748B),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF6366F1).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        type,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: Color(0xFF6366F1),
+                          color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -324,9 +318,8 @@ class ResourcesScreen extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       duration,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF64748B),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -334,7 +327,7 @@ class ResourcesScreen extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: Color(0xFF94A3B8)),
+          Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
         ],
       ),
     );

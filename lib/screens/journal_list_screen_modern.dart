@@ -27,7 +27,12 @@ class _JournalListScreenState extends State<JournalListScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    context.read<JournalProvider>().loadJournalEntries();
+    // Defer loading until after the build is complete to avoid setState during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<JournalProvider>().loadJournalEntries();
+      }
+    });
   }
 
   @override

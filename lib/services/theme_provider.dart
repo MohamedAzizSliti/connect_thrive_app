@@ -7,7 +7,8 @@ class ThemeProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
 
   ThemeMode get themeMode => _themeMode;
-  ThemeData get currentTheme => _themeMode == ThemeMode.dark ? AppTheme.darkTheme : AppTheme.lightTheme;
+  ThemeData get currentTheme =>
+      _themeMode == ThemeMode.dark ? AppTheme.darkTheme : AppTheme.lightTheme;
   bool get isDarkMode => _themeMode == ThemeMode.dark;
 
   ThemeProvider() {
@@ -17,7 +18,7 @@ class ThemeProvider extends ChangeNotifier {
   Future<void> _loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
     final themeString = prefs.getString(_themeKey) ?? 'system';
-    
+
     switch (themeString) {
       case 'light':
         _themeMode = ThemeMode.light;
@@ -41,7 +42,7 @@ class ThemeProvider extends ChangeNotifier {
   Future<void> setThemeMode(ThemeMode mode) async {
     final prefs = await SharedPreferences.getInstance();
     _themeMode = mode;
-    
+
     String themeString;
     switch (mode) {
       case ThemeMode.light:
@@ -54,7 +55,7 @@ class ThemeProvider extends ChangeNotifier {
         themeString = 'system';
         break;
     }
-    
+
     await prefs.setString(_themeKey, themeString);
     notifyListeners();
   }

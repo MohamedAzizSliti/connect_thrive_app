@@ -149,15 +149,18 @@ class JournalService {
     }
   }
 
-  // Search journal entries
-  static Future<Map<String, dynamic>> searchJournalEntries(String query) async {
+  // Search journal entries with optional query parameter
+  static Future<Map<String, dynamic>> searchJournalEntries({
+    String query = '',
+    int page = 1,
+    int limit = 20,
+  }) async {
     try {
-      final response = await http.get(
-        Uri.parse(
-          '$baseUrl/journal/search?query=${Uri.encodeComponent(query)}',
-        ),
-        headers: authHeaders,
+      final url = Uri.parse(
+        '$baseUrl/journal?page=$page&limit=$limit${query.isNotEmpty ? '&search=${Uri.encodeComponent(query)}' : ''}',
       );
+
+      final response = await http.get(url, headers: authHeaders);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

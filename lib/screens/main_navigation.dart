@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:connect_thrive_app/l10n/app_localizations.dart';
-import 'package:connect_thrive_app/services/auth_provider.dart';
 import 'package:connect_thrive_app/widgets/language_switcher.dart';
 import 'package:connect_thrive_app/widgets/theme_switcher.dart';
 import 'package:connect_thrive_app/screens/home_screen.dart';
@@ -10,6 +8,7 @@ import 'package:connect_thrive_app/screens/forums_screen_modern.dart';
 import 'package:connect_thrive_app/screens/journal_list_screen_modern.dart';
 import 'package:connect_thrive_app/screens/ai_chat_screen.dart';
 import 'package:connect_thrive_app/screens/doctors_screen_modern.dart';
+import 'package:connect_thrive_app/screens/settings_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -52,10 +51,13 @@ class _MainNavigationState extends State<MainNavigation> {
           const SizedBox(width: 8),
           const LanguageSwitcher(),
           IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: AppLocalizations.of(context)?.logout ?? 'Logout',
+            icon: const Icon(Icons.settings),
+            tooltip: AppLocalizations.of(context)?.settings ?? 'Settings',
             onPressed: () {
-              Provider.of<AuthProvider>(context, listen: false).logout();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
             },
           ),
         ],

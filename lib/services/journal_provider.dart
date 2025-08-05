@@ -181,7 +181,7 @@ class JournalProvider extends ChangeNotifier {
     _clearError();
 
     try {
-      final result = await JournalService.searchJournalEntries(query);
+      final result = await JournalService.searchJournalEntries(query: query);
 
       if (result['success']) {
         final List<dynamic> data = result['data'];

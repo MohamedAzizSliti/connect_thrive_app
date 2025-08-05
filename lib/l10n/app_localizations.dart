@@ -98,6 +98,15 @@ class AppLocalizations {
   String get alreadyHaveAccountSignIn =>
       _localizedValues[locale.languageCode]!['alreadyHaveAccountSignIn']!;
 
+  // Modern Login Screen
+  String get signInToContinue =>
+      _localizedValues[locale.languageCode]!['signInToContinue']!;
+  String get poweredBy => _localizedValues[locale.languageCode]!['poweredBy']!;
+  String get ministryOfYouthAndSports =>
+      _localizedValues[locale.languageCode]!['ministryOfYouthAndSports']!;
+  String get connectAndThrive =>
+      _localizedValues[locale.languageCode]!['connectAndThrive']!;
+
   // Journal
   String get newJournalEntry =>
       _localizedValues[locale.languageCode]!['newJournalEntry']!;
@@ -297,7 +306,79 @@ class AppLocalizations {
   String get systemMode =>
       _localizedValues[locale.languageCode]!['systemMode']!;
 
+  // Settings
+  String get preferences =>
+      _localizedValues[locale.languageCode]!['preferences']!;
+  String get language => _localizedValues[locale.languageCode]!['language']!;
+  String get changePassword =>
+      _localizedValues[locale.languageCode]!['changePassword']!;
+  String get editProfile =>
+      _localizedValues[locale.languageCode]!['editProfile']!;
+  String get name => _localizedValues[locale.languageCode]!['name']!;
+  String get email => _localizedValues[locale.languageCode]!['email']!;
+  String get currentPassword =>
+      _localizedValues[locale.languageCode]!['currentPassword']!;
+  String get newPassword =>
+      _localizedValues[locale.languageCode]!['newPassword']!;
+  String get profileUpdatedSuccessfully =>
+      _localizedValues[locale.languageCode]!['profileUpdatedSuccessfully']!;
+  String get failedToUpdateProfile =>
+      _localizedValues[locale.languageCode]!['failedToUpdateProfile']!;
+  String get passwordChangedSuccessfully =>
+      _localizedValues[locale.languageCode]!['passwordChangedSuccessfully']!;
+  String get failedToChangePassword =>
+      _localizedValues[locale.languageCode]!['failedToChangePassword']!;
+  String get languageChangedTo =>
+      _localizedValues[locale.languageCode]!['languageChangedTo']!;
+  String get areYouSureYouWantToLogout =>
+      _localizedValues[locale.languageCode]!['areYouSureYouWantToLogout']!;
 
+  // Profile completion
+  String get completeProfile =>
+      _localizedValues[locale.languageCode]!['completeProfile']!;
+  String get uploadProfilePicture =>
+      _localizedValues[locale.languageCode]!['uploadProfilePicture']!;
+  String get changeProfilePicture =>
+      _localizedValues[locale.languageCode]!['changeProfilePicture']!;
+  String get takePhoto => _localizedValues[locale.languageCode]!['takePhoto']!;
+  String get chooseFromGallery =>
+      _localizedValues[locale.languageCode]!['chooseFromGallery']!;
+  String get removePhoto =>
+      _localizedValues[locale.languageCode]!['removePhoto']!;
+  String get firstName => _localizedValues[locale.languageCode]!['firstName']!;
+  String get lastName => _localizedValues[locale.languageCode]!['lastName']!;
+  String get bio => _localizedValues[locale.languageCode]!['bio']!;
+  String get phone => _localizedValues[locale.languageCode]!['phone']!;
+  String get birthDate => _localizedValues[locale.languageCode]!['birthDate']!;
+  String get gender => _localizedValues[locale.languageCode]!['gender']!;
+  String get male => _localizedValues[locale.languageCode]!['male']!;
+  String get female => _localizedValues[locale.languageCode]!['female']!;
+  String get other => _localizedValues[locale.languageCode]!['other']!;
+  String get preferNotToSay =>
+      _localizedValues[locale.languageCode]!['preferNotToSay']!;
+  String get profilePicture =>
+      _localizedValues[locale.languageCode]!['profilePicture']!;
+  String get profileCompleted =>
+      _localizedValues[locale.languageCode]!['profileCompleted']!;
+  String get pleaseCompleteYourProfile =>
+      _localizedValues[locale.languageCode]!['pleaseCompleteYourProfile']!;
+  String get requiredField =>
+      _localizedValues[locale.languageCode]!['requiredField']!;
+  String get tellUsAboutYourself =>
+      _localizedValues[locale.languageCode]!['tellUsAboutYourself']!;
+  String get personalInformation =>
+      _localizedValues[locale.languageCode]!['personalInformation']!;
+  String get changePhoto =>
+      _localizedValues[locale.languageCode]!['changePhoto']!;
+  String get fullName => _localizedValues[locale.languageCode]!['fullName']!;
+  String get enterYourFullName =>
+      _localizedValues[locale.languageCode]!['enterYourFullName']!;
+  String get pleaseEnterYourName =>
+      _localizedValues[locale.languageCode]!['pleaseEnterYourName']!;
+  String get nameMustBeAtLeast2Characters =>
+      _localizedValues[locale.languageCode]!['nameMustBeAtLeast2Characters']!;
+  String get skipForNow =>
+      _localizedValues[locale.languageCode]!['skipForNow']!;
 
   static final Map<String, Map<String, String>> _localizedValues = {
     'en': {
@@ -322,11 +403,14 @@ class AppLocalizations {
 
       // Onboarding
       'onboardingWelcomeTitle': 'Welcome to Connect & Thrive',
-      'onboardingWelcomeDesc': 'Your safe space for mental health support, designed specifically for teenagers in Tunisia',
+      'onboardingWelcomeDesc':
+          'Your safe space for mental health support, designed specifically for teenagers in Tunisia',
       'onboardingMoodTitle': 'Track Your Mood',
-      'onboardingMoodDesc': 'Monitor your emotions daily and discover patterns to improve your mental wellbeing',
+      'onboardingMoodDesc':
+          'Monitor your emotions daily and discover patterns to improve your mental wellbeing',
       'onboardingCommunityTitle': 'Connect with Community',
-      'onboardingCommunityDesc': 'Join supportive communities and connect with peers who understand your journey',
+      'onboardingCommunityDesc':
+          'Join supportive communities and connect with peers who understand your journey',
       'skip': 'Skip',
 
       // Authentication
@@ -367,7 +451,8 @@ class AppLocalizations {
       'journalSaved': 'Journal saved',
       'journalUpdated': 'Journal updated',
       'journalDeleted': 'Journal deleted',
-      'confirmDeleteJournal': 'Are you sure you want to delete this journal entry?',
+      'confirmDeleteJournal':
+          'Are you sure you want to delete this journal entry?',
       'journalSubtitle': 'Track your thoughts and emotions',
       'moodTracker': 'Mood Tracker',
       'howAreYouFeeling': 'How are you feeling today?',
@@ -454,13 +539,27 @@ class AppLocalizations {
       'copingSkills': 'Coping Skills',
       'positivePsychology': 'Positive Psychology',
       'managingAnxiety': 'Managing Anxiety',
-      'managingAnxietyDesc': 'Learn effective techniques to manage and reduce anxiety in daily life',
+      'managingAnxietyDesc':
+          'Learn effective techniques to manage and reduce anxiety in daily life',
       'breathingExercise': 'Breathing Exercise',
-      'breathingExerciseDesc': 'Simple breathing techniques to calm your mind and reduce stress',
+      'breathingExerciseDesc':
+          'Simple breathing techniques to calm your mind and reduce stress',
+      'understandingDepression': 'Understanding Depression',
+      'understandingDepressionDesc':
+          'Learn about depression, its symptoms, and effective coping strategies',
+      'muscleRelaxation': 'Progressive Muscle Relaxation',
+      'muscleRelaxationDesc':
+          'Guided technique to release physical tension and mental stress',
+      'buildingSelfEsteem': 'Building Self-Esteem',
+      'buildingSelfEsteemDesc':
+          'Practical exercises to develop confidence and positive self-image',
       'read15min': 'Read • 15 min',
+      'read20min': 'Read • 20 min',
       'audio10min': 'Audio • 10 min',
+      'video15min': 'Video • 15 min',
       'article': 'Article',
       'audio': 'Audio',
+      'video': 'Video',
       'meditation': 'Meditation',
       'readMore': 'Read More',
       'watchNow': 'Watch Now',
@@ -472,11 +571,51 @@ class AppLocalizations {
       'helpSupport': 'Help & Support',
       'logout': 'Logout',
       'deleteAccount': 'Delete Account',
-
-      // Theme and Design
+      'themeSettings': 'Theme Settings',
       'darkMode': 'Dark Mode',
       'lightMode': 'Light Mode',
       'systemMode': 'System Mode',
+      'preferences': 'Preferences',
+      'security': 'Security',
+      'changePassword': 'Change Password',
+      'editProfile': 'Edit Profile',
+      'profile': 'Profile',
+      'name': 'Name',
+      'email': 'Email',
+      'currentPassword': 'Current Password',
+      'newPassword': 'New Password',
+      'confirmPassword': 'Confirm Password',
+      'language': 'Language',
+      'completeProfile': 'Complete Profile',
+      'uploadProfilePicture': 'Upload Profile Picture',
+      'changeProfilePicture': 'Change Profile Picture',
+      'takePhoto': 'Take a Photo',
+      'chooseFromGallery': 'Choose from Gallery',
+      'removePhoto': 'Remove Photo',
+      'firstName': 'First Name',
+      'lastName': 'Last Name',
+      'bio': 'Bio',
+      'phone': 'Phone Number',
+      'birthDate': 'Birth Date',
+      'gender': 'Gender',
+      'male': 'Male',
+      'female': 'Female',
+      'other': 'Other',
+      'preferNotToSay': 'Prefer not to say',
+      'profilePicture': 'Profile Picture',
+      'profileCompleted': 'Profile completed successfully',
+      'pleaseCompleteYourProfile':
+          'Please complete your profile for a better experience',
+      'requiredField': 'This field is required',
+      'tellUsAboutYourself': 'Tell us about yourself',
+      'personalInformation': 'Personal Information',
+      'changePhoto': 'Change Photo',
+      'addPhoto': 'Add Photo',
+      'fullName': 'Full Name',
+      'enterYourFullName': 'Enter your full name',
+      'pleaseEnterYourName': 'Please enter your name',
+      'nameMustBeAtLeast2Characters': 'Name must be at least 2 characters',
+      'skipForNow': 'Skip for now',
     },
     'ar': {
       'appTitle': 'كونيكت & ثرايف',
@@ -500,11 +639,14 @@ class AppLocalizations {
 
       // Onboarding
       'onboardingWelcomeTitle': 'مرحباً في كونيكت & ثرايف',
-      'onboardingWelcomeDesc': 'مساحتك الآمنة لدعم الصحة النفسية، مصممة خصيصاً للمراهقين في تونس',
+      'onboardingWelcomeDesc':
+          'مساحتك الآمنة لدعم الصحة النفسية، مصممة خصيصاً للمراهقين في تونس',
       'onboardingMoodTitle': 'تتبع مزاجك',
-      'onboardingMoodDesc': 'راقب مشاعرك يومياً واكتشف الأنماط لتحسين صحتك النفسية',
+      'onboardingMoodDesc':
+          'راقب مشاعرك يومياً واكتشف الأنماط لتحسين صحتك النفسية',
       'onboardingCommunityTitle': 'تواصل مع المجتمع',
-      'onboardingCommunityDesc': 'انضم إلى مجتمعات داعمة وتواصل مع أقرانك الذين يفهمون رحلتك',
+      'onboardingCommunityDesc':
+          'انضم إلى مجتمعات داعمة وتواصل مع أقرانك الذين يفهمون رحلتك',
       'skip': 'تخطي',
 
       // Authentication
@@ -633,13 +775,25 @@ class AppLocalizations {
       'copingSkills': 'مهارات التكيف',
       'positivePsychology': 'علم النفس الإيجابي',
       'managingAnxiety': 'إدارة القلق',
-      'managingAnxietyDesc': 'تعلم تقنيات فعالة لإدارة وتقليل القلق في الحياة اليومية',
+      'managingAnxietyDesc':
+          'تعلم تقنيات فعالة لإدارة وتقليل القلق في الحياة اليومية',
       'breathingExercise': 'تمرين التنفس',
       'breathingExerciseDesc': 'تقنيات تنفس بسيطة لتهدئة عقلك وتقليل التوتر',
+      'understandingDepression': 'فهم الاكتئاب',
+      'understandingDepressionDesc':
+          'تعلم عن الاكتئاب وأعراضه واستراتيجيات التعامل الفعالة',
+      'muscleRelaxation': 'استرخاء العضلات التدريجي',
+      'muscleRelaxationDesc': 'تقنية موجهة لإطلاق التوتر الجسدي والعقلي',
+      'buildingSelfEsteem': 'بناء تقدير الذات',
+      'buildingSelfEsteemDesc':
+          'تمارين عملية لتطوير الثقة بالنفس والصورة الإيجابية',
       'read15min': 'قراءة • 15 دقيقة',
+      'read20min': 'قراءة • 20 دقيقة',
       'audio10min': 'صوت • 10 دقائق',
+      'video15min': 'فيديو • 15 دقيقة',
       'article': 'مقال',
       'audio': 'صوت',
+      'video': 'فيديو',
       'meditation': 'تأمل',
       'readMore': 'اقرأ المزيد',
       'watchNow': 'شاهد الآن',
@@ -657,6 +811,52 @@ class AppLocalizations {
       'darkMode': 'الوضع الداكن',
       'lightMode': 'الوضع الفاتح',
       'systemMode': 'وضع النظام',
+      'preferences': 'التفضيلات',
+      'security': 'الأمان',
+      'changePassword': 'تغيير كلمة المرور',
+      'editProfile': 'تعديل الملف الشخصي',
+      'profile': 'الملف الشخصي',
+      'name': 'الاسم',
+      'email': 'البريد الإلكتروني',
+      'currentPassword': 'كلمة المرور الحالية',
+      'newPassword': 'كلمة المرور الجديدة',
+      'confirmPassword': 'تأكيد كلمة المرور',
+      'save': 'حفظ',
+      'cancel': 'إلغاء',
+      'language': 'اللغة',
+      'profileUpdatedSuccessfully': 'تم تحديث الملف الشخصي بنجاح',
+      'failedToUpdateProfile': 'فشل تحديث الملف الشخصي',
+      'passwordChangedSuccessfully': 'تم تغيير كلمة المرور بنجاح',
+      'failedToChangePassword': 'فشل تغيير كلمة المرور',
+      'languageChangedTo': 'تم تغيير اللغة إلى',
+      'areYouSureYouWantToLogout': 'هل أنت متأكد أنك تريد تسجيل الخروج؟',
+      'completeProfile': 'إكمال الملف الشخصي',
+      'uploadProfilePicture': 'رفع صورة الملف الشخصي',
+      'changeProfilePicture': 'تغيير صورة الملف الشخصي',
+      'takePhoto': 'التقاط صورة',
+      'chooseFromGallery': 'اختيار من المعرض',
+      'removePhoto': 'إزالة الصورة',
+      'firstName': 'الاسم الأول',
+      'lastName': 'الاسم الأخير',
+      'bio': 'السيرة الذاتية',
+      'phone': 'رقم الهاتف',
+      'birthDate': 'تاريخ الميلاد',
+      'gender': 'الجنس',
+      'male': 'ذكر',
+      'female': 'أنثى',
+      'other': 'آخر',
+      'preferNotToSay': 'يفضل عدم الإفصاح',
+      'profilePicture': 'صورة الملف الشخصي',
+      'profileCompleted': 'تم إكمال الملف الشخصي بنجاح',
+      'pleaseCompleteYourProfile':
+          'يرجى إكمال ملفك الشخصي للاستمتاع بتجربة أفضل',
+      'requiredField': 'هذا الحقل مطلوب',
+      'tellUsAboutYourself': 'أخبرنا عن نفسك',
+      'personalInformation': 'المعلومات الشخصية',
+      'signInToContinue': 'تسجيل الدخول للمتابعة',
+      'poweredBy': 'مدعوم من',
+      'ministryOfYouthAndSports': 'وزارة الشباب والرياضة',
+      'connectAndThrive': 'تواصل وازدهر',
     },
     'fr': {
       'appTitle': 'Connect & Thrive',
@@ -679,11 +879,14 @@ class AppLocalizations {
 
       // Onboarding
       'onboardingWelcomeTitle': 'Bienvenue sur Connect & Thrive',
-      'onboardingWelcomeDesc': 'Votre espace sécurisé pour le soutien santé mentale, conçu spécifiquement pour les adolescents en Tunisie',
+      'onboardingWelcomeDesc':
+          'Votre espace sécurisé pour le soutien santé mentale, conçu spécifiquement pour les adolescents en Tunisie',
       'onboardingMoodTitle': 'Suivez votre humeur',
-      'onboardingMoodDesc': 'Surveillez vos émotions quotidiennement et découvrez des modèles pour améliorer votre bien-être mental',
+      'onboardingMoodDesc':
+          'Surveillez vos émotions quotidiennement et découvrez des modèles pour améliorer votre bien-être mental',
       'onboardingCommunityTitle': 'Connectez-vous avec la communauté',
-      'onboardingCommunityDesc': 'Rejoignez des communautés de soutien et connectez-vous avec des pairs qui comprennent votre parcours',
+      'onboardingCommunityDesc':
+          'Rejoignez des communautés de soutien et connectez-vous avec des pairs qui comprennent votre parcours',
       'skip': 'Passer',
 
       // Authentication
@@ -814,13 +1017,27 @@ class AppLocalizations {
       'copingSkills': 'Compétences d\'Adaptation',
       'positivePsychology': 'Psychologie Positive',
       'managingAnxiety': 'Gérer l\'Anxiété',
-      'managingAnxietyDesc': 'Apprenez des techniques efficaces pour gérer et réduire l\'anxiété au quotidien',
+      'managingAnxietyDesc':
+          'Apprenez des techniques efficaces pour gérer et réduire l\'anxiété au quotidien',
       'breathingExercise': 'Exercice de Respiration',
-      'breathingExerciseDesc': 'Techniques de respiration simples pour calmer votre esprit et réduire le stress',
+      'breathingExerciseDesc':
+          'Techniques de respiration simples pour calmer votre esprit et réduire le stress',
+      'understandingDepression': 'Comprendre la Dépression',
+      'understandingDepressionDesc':
+          'Apprenez à connaître la dépression, ses symptômes et des stratégies d adaptation efficaces',
+      'muscleRelaxation': 'Relaxation Musculaire Progressive',
+      'muscleRelaxationDesc':
+          'Technique guidée pour libérer la tension physique et mentale',
+      'buildingSelfEsteem': 'Construire l Estime de Soi',
+      'buildingSelfEsteemDesc':
+          'Des exercices pratiques pour développer la confiance et l image positive de soi',
       'read15min': 'Lire • 15 min',
+      'read20min': 'Lire • 20 min',
       'audio10min': 'Audio • 10 min',
+      'video15min': 'Vidéo • 15 min',
       'article': 'Article',
       'audio': 'Audio',
+      'video': 'Vidéo',
       'meditation': 'Méditation',
       'readMore': 'Lire la suite',
       'watchNow': 'Regarder maintenant',
@@ -835,9 +1052,78 @@ class AppLocalizations {
 
       // Theme and Design
       'themeSettings': 'Paramètres du thème',
-      'darkMode': 'Mode Sombre',
-      'lightMode': 'Mode Clair',
-      'systemMode': 'Mode Système',
+      'darkMode': 'Mode sombre',
+      'lightMode': 'Mode clair',
+      'systemMode': 'Mode système',
+      'preferences': 'Préférences',
+      'security': 'Sécurité',
+      'changePassword': 'Changer le mot de passe',
+      'editProfile': 'Modifier le profil',
+      'profile': 'Profil',
+      'name': 'Nom',
+      'email': 'Email',
+      'currentPassword': 'Mot de passe actuel',
+      'newPassword': 'Nouveau mot de passe',
+      'confirmPassword': 'Confirmer le mot de passe',
+      'save': 'Enregistrer',
+      'cancel': 'Annuler',
+      'language': 'Langue',
+      'profileUpdatedSuccessfully': 'Profil mis à jour avec succès',
+      'failedToUpdateProfile': 'Échec de la mise à jour du profil',
+      'passwordChangedSuccessfully': 'Mot de passe changé avec succès',
+      'failedToChangePassword': 'Échec de la modification du mot de passe',
+      'languageChangedTo': 'Langue changée en',
+      'areYouSureYouWantToLogout':
+          'Êtes-vous sûr de vouloir vous déconnecter ?',
+      'completeProfile': 'Compléter le profil',
+      'uploadProfilePicture': 'Télécharger une photo de profil',
+      'changeProfilePicture': 'Changer la photo de profil',
+      'takePhoto': 'Prendre une photo',
+      'chooseFromGallery': 'Choisir depuis la galerie',
+      'removePhoto': 'Supprimer la photo',
+      'firstName': 'Prénom',
+      'lastName': 'Nom',
+      'bio': 'Biographie',
+      'phone': 'Numéro de téléphone',
+      'birthDate': 'Date de naissance',
+      'gender': 'Genre',
+      'male': 'Homme',
+      'female': 'Femme',
+      'other': 'Autre',
+      'preferNotToSay': 'Préfère ne pas répondre',
+      'profilePicture': 'Photo de profil',
+      'profileCompleted': 'Profil complété avec succès',
+      'pleaseCompleteYourProfile':
+          'Veuillez compléter votre profil pour une meilleure expérience',
+      'requiredField': 'Ce champ est requis',
+      'tellUsAboutYourself': 'Parlez-nous de vous',
+      'personalInformation': 'Informations personnelles',
+      'signInToContinue': 'Connectez-vous pour continuer',
+      'poweredBy': 'Propulsé par',
+      'ministryOfYouthAndSports': 'Ministère de la Jeunesse et des Sports',
+      'connectAndThrive': 'Connectez et Prospérez',
+      'profileCompleted': 'Profile completed successfully',
+      'pleaseCompleteYourProfile':
+          'Please complete your profile for a better experience',
+      'requiredField': 'This field is required',
+      'tellUsAboutYourself': 'Tell us about yourself',
+      'personalInformation': 'Personal Information',
+      'changePhoto': 'Changer la photo',
+      'addPhoto': 'Ajouter une photo',
+      'fullName': 'Nom complet',
+      'enterYourFullName': 'Entrez votre nom complet',
+      'pleaseEnterYourName': 'Veuillez entrer votre nom',
+      'nameMustBeAtLeast2Characters':
+          'Le nom doit contenir au moins 2 caractères',
+      'skipForNow': 'Passer pour le moment',
+      'changePhoto': 'Changer la photo',
+      'addPhoto': 'Ajouter une photo',
+      'fullName': 'Nom complet',
+      'enterYourFullName': 'Entrez votre nom complet',
+      'pleaseEnterYourName': 'Veuillez entrer votre nom',
+      'nameMustBeAtLeast2Characters':
+          'Le nom doit contenir au moins 2 caractères',
+      'skipForNow': 'Passer pour le moment',
     },
   };
 }

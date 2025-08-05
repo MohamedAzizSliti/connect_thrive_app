@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../services/auth_provider.dart';
+import '../widgets/mood_analytics_dashboard.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -158,6 +159,11 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              
+              const SizedBox(height: 32),
+              
+              // Mood Analytics Dashboard
+              const MoodAnalyticsDashboard(),
             ],
           ),
         ),

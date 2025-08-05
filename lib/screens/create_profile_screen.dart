@@ -4,12 +4,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:connect_thrive_app/services/auth_provider.dart';
 import 'package:connect_thrive_app/screens/main_navigation.dart';
+import 'package:connect_thrive_app/l10n/app_localizations.dart';
 
 class CreateProfileScreen extends StatefulWidget {
-  const CreateProfileScreen({Key? key}) : super(key: key);
+  const CreateProfileScreen({super.key});
 
   @override
-  _CreateProfileScreenState createState() => _CreateProfileScreenState();
+  State<CreateProfileScreen> createState() => _CreateProfileScreenState();
 }
 
 class _CreateProfileScreenState extends State<CreateProfileScreen> {
@@ -88,8 +89,17 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final localizations = AppLocalizations.of(context)!;
+    
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text(localizations.completeProfile),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -98,35 +108,22 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 40),
-                const Text(
-                  'Complete Your Profile',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2E8B57),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Let\'s personalize your experience',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                ),
+                const SizedBox(height: 20),
                 const SizedBox(height: 40),
                 
                 // Profile Image
                 GestureDetector(
                   onTap: _pickImage,
                   child: Container(
-                    width: 120,
-                    height: 120,
+                    width: 140,
+                    height: 140,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.grey[200],
-                      border: Border.all(color: const Color(0xFF2E8B57), width: 2),
+                      color: colorScheme.surfaceVariant.withOpacity(0.5),
+                      border: Border.all(
+                        color: colorScheme.primary.withOpacity(0.3),
+                        width: 2,
+                      ),
                     ),
                     child: _selectedImage != null
                         ? ClipOval(
@@ -135,19 +132,28 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                               fit: BoxFit.cover,
                             ),
                           )
-                        : const Icon(
-                            Icons.add_a_photo,
-                            size: 40,
-                            color: Color(0xFF2E8B57),
+                        : Icon(
+                            Icons.add_a_photo_outlined,
+                            size: 48,
+                            color: colorScheme.primary,
                           ),
                   ),
                 ),
                 const SizedBox(height: 8),
-                TextButton(
+                TextButton.icon(
                   onPressed: _pickImage,
-                  child: Text(
-                    _selectedImage != null ? 'Change Photo' : 'Add Photo',
-                    style: const TextStyle(color: Color(0xFF2E8B57)),
+                  icon: Icon(
+                    _selectedImage != null ? Icons.edit : Icons.add_a_photo,
+                    size: 20,
+                  ),
+                  label: Text(
+                    _selectedImage != null 
+                        ? localizations.changePhoto 
+                        : localizations.addPhoto,
+                    style: TextStyle(color: colorScheme.primary),
+                  ),
+                  style: TextButton.styleFrom(
+                    foregroundColor: colorScheme.primary,
                   ),
                 ),
                 
@@ -157,23 +163,30 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
-                    labelText: 'Full Name',
-                    hintText: 'Enter your full name',
-                    prefixIcon: const Icon(Icons.person, color: Color(0xFF2E8B57)),
+                    labelText: localizations.fullName,
+                    hintText: localizations.enterYourFullName,
+                    prefixIcon: Icon(Icons.person_outline, color: colorScheme.primary),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: colorScheme.outline),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: colorScheme.outlineVariant),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFF2E8B57), width: 2),
+                      borderSide: BorderSide(color: colorScheme.primary, width: 2),
                     ),
+                    filled: true,
+                    fillColor: colorScheme.surfaceVariant.withOpacity(0.3),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter your name';
+                      return localizations.pleaseEnterYourName;
                     }
                     if (value.trim().length < 2) {
-                      return 'Name must be at least 2 characters';
+                      return localizations.nameMustBeAtLeast2Characters;
                     }
                     return null;
                   },
@@ -184,22 +197,32 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 // Create Profile Button
                 SizedBox(
                   width: double.infinity,
-                  height: 50,
+                  height: 56,
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _createProfile,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2E8B57),
-                      foregroundColor: Colors.white,
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.onPrimary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      elevation: 2,
                     ),
                     child: _isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text(
-                            'Complete Profile',
-                            style: TextStyle(
+                        ? SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                colorScheme.onPrimary,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            localizations.completeProfile,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -207,7 +230,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   ),
                 ),
                 
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     // Skip profile creation for now
@@ -215,9 +238,12 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                       MaterialPageRoute(builder: (_) => const MainNavigation()),
                     );
                   },
-                  child: const Text(
-                    'Skip for now',
-                    style: TextStyle(color: Colors.grey),
+                  child: Text(
+                    localizations.skipForNow,
+                    style: TextStyle(
+                      color: colorScheme.onSurfaceVariant.withOpacity(0.7),
+                      fontSize: 14,
+                    ),
                   ),
                 ),
               ],
